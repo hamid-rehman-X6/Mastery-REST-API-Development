@@ -12,14 +12,19 @@ import config from "@/config";
 /** 
  * Models
  */
+import User from '@/models/user';
 
 /**
  * Types
  */
 import { Request, Response } from "express";
+import { IUser } from "@/models/user";
 
 const register = async (req: Request, res: Response): Promise<void> => {
     try {
+        res.status(201).json({
+            message: 'New user registered successfully',
+        })
 
     } catch (err) {
         res.status(500).json({
