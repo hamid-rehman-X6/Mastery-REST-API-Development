@@ -6,6 +6,7 @@
 /**
  * Custom Modules
  */
+import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
 import { logger } from "@/lib/winston";
 import { generateRandomUserName } from "@/utils";
 import config from "@/config";
@@ -33,22 +34,38 @@ const register = async (req: Request, res: Response): Promise<void> => {
             email,password,
             role,
         });
+        console.log(newUser)
 
         // Generate access token and refresh token for new user
+        const accessToken = generateAccessToken(newUser?._id);
+        const refreshToken = generateRefreshToken(newUser?._id);
+
+        // Set refresh token in httpOnly cookie
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: config.NODE_ENV === 'production',
+            sameSite: 'strict',
+        })
 
         res.status(201).json({
             user: {
                 username: newUser.username,
                 email: newUser.email,
                 role: newUser.role,
-            }
-        })
+            },
+            accessToken,
+        });
+        logger.info('User registered successfully', {
+            username: newUser.username,
+            email: newUser.email,
+            role: newUser.role,
+        });
 
     } catch (err) {
         res.status(500).json({
             code: 'ServerError',
             message: 'Internal Server Error',
-            error: err
+            error: err instanceof Error ? err.message : 'Unknown error',
         });
 
         logger.error('Error during user registration', err);
