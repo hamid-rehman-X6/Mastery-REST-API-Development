@@ -23,7 +23,7 @@ import type { ConnectOptions } from 'mongoose';
  * Client Option
  */
 const clientOptions: ConnectOptions = {
-    dbName: 'blod-db',
+    dbName: 'blog-db',
     appName: 'Blog API',
     serverApi: {
         version: '1',
