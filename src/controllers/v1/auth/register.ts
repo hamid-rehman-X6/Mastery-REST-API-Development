@@ -34,7 +34,6 @@ const register = async (req: Request, res: Response): Promise<void> => {
             email,password,
             role,
         });
-        console.log(newUser)
 
         // Generate access token and refresh token for new user
         const accessToken = generateAccessToken(newUser?._id);
