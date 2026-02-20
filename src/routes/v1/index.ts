@@ -1,4 +1,4 @@
-/** 
+/**
  * @copyright 2026 HamidRehman
  * @license Apache-2.0
  */
@@ -6,7 +6,7 @@
 /**
  * Node modules
  */
-import { Router } from "express";
+import { Router } from 'express';
 const router = Router();
 
 /**
@@ -18,13 +18,13 @@ import authRoutes from '@/routes/v1/auth';
  * Root Route
  */
 router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'API is Live',
-        status: 'ok',
-        version: '1.0.0',
-        timestamp: new Date().toISOString(),
-    })
-})
+  res.status(200).json({
+    message: 'API is Live',
+    status: 'ok',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  });
+});
 
 router.use('/auth', authRoutes);
 

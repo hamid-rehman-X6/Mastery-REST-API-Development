@@ -1,4 +1,4 @@
-/** 
+/**
  * @copyright 2026 HamidRehman
  * @license Apache-2.0
  */
@@ -27,7 +27,7 @@ import v1Routes from '@/routes/v1';
 
 /**
  * Types
-*/
+ */
 import type { CorsOptions } from 'cors';
 
 /**
@@ -36,15 +36,22 @@ import type { CorsOptions } from 'cors';
 const app = express();
 
 const corsOptions: CorsOptions = {
-    origin(origin, callback) {
-        if (config.NODE_ENV === 'development' || !origin || config.WHITELIST_ORIGINS.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error(`CORS Error ${origin} is not allowed by CORS.`), false);
-            logger.warn(`CORS Error ${origin} is not allowed by CORS.`)
-        }
-    },
-}
+  origin(origin, callback) {
+    if (
+      config.NODE_ENV === 'development' ||
+      !origin ||
+      config.WHITELIST_ORIGINS.includes(origin)
+    ) {
+      callback(null, true);
+    } else {
+      callback(
+        new Error(`CORS Error ${origin} is not allowed by CORS.`),
+        false,
+      );
+      logger.warn(`CORS Error ${origin} is not allowed by CORS.`);
+    }
+  },
+};
 
 // Apply cors middleware
 app.use(cors(corsOptions));
@@ -60,16 +67,15 @@ app.use(cookieParser());
 
 // Enable response compression to reduce payload size and improve performance
 app.use(
-    compression({
-        threshold: 1024, // Only compress responses larger than 1KB
-    })
-)
+  compression({
+    threshold: 1024, // Only compress responses larger than 1KB
+  }),
+);
 // Use Helmet to enhance security by setting various HTTP headers
 app.use(helmet());
 
 // Apply rate limiting middleware to prevents excessive requests and enhance security
 app.use(limiter);
-
 
 /**
  * Immediately Invoked Async Function Expression (IIFE) to start the server.
@@ -81,21 +87,20 @@ app.use(limiter);
  *   exits with status 1.
  */
 (async () => {
-    try {
-        await connectToDatabase();
+  try {
+    await connectToDatabase();
 
-        app.use('/api/v1', v1Routes);
+    app.use('/api/v1', v1Routes);
 
-        app.listen(config.PORT, () => {
-            logger.info(`Server Running: http://localhost:${config.PORT}`);
-        });
-
-    } catch (error) {
-        logger.error('Failed to start the server', error);
-        if (config.NODE_ENV === 'production') {
-            process.exit(1);
-        }
+    app.listen(config.PORT, () => {
+      logger.info(`Server Running: http://localhost:${config.PORT}`);
+    });
+  } catch (error) {
+    logger.error('Failed to start the server', error);
+    if (config.NODE_ENV === 'production') {
+      process.exit(1);
     }
+  }
 })();
 
 /**
@@ -112,14 +117,14 @@ app.use(limiter);
  */
 
 const handleServerShutDown = async () => {
-    try {
-        await disconnectFromDatabase();
-        logger.warn(`Server SHUTDOWN`);
-        process.exit(0);
-    } catch (error) {
-        logger.error(`Error during server SHUTDOWN`, error);
-    }
-}
+  try {
+    await disconnectFromDatabase();
+    logger.warn(`Server SHUTDOWN`);
+    process.exit(0);
+  } catch (error) {
+    logger.error(`Error during server SHUTDOWN`, error);
+  }
+};
 
 /**
  * Listens for termination signals (`SIGTERM` and `SIGINT`).

@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
  * Custom modules
  */
 import config from '@/config';
-import { logger } from '@/lib/winston'
+import { logger } from '@/lib/winston';
 
 /**
  * Types
@@ -23,13 +23,13 @@ import type { ConnectOptions } from 'mongoose';
  * Client Option
  */
 const clientOptions: ConnectOptions = {
-    dbName: 'blog-db',
-    appName: 'Blog API',
-    serverApi: {
-        version: '1',
-        strict: true,
-        deprecationErrors: true,
-    },
+  dbName: 'blog-db',
+  appName: 'Blog API',
+  serverApi: {
+    version: '1',
+    strict: true,
+    deprecationErrors: true,
+  },
 };
 
 /**
@@ -43,24 +43,25 @@ const clientOptions: ConnectOptions = {
  */
 
 export const connectToDatabase = async (): Promise<void> => {
-    if (!config.MONGO_URI) {
-        throw new Error('MongoDB URI is not defined in the configuration.');
-    }
+  if (!config.MONGO_URI) {
+    throw new Error('MongoDB URI is not defined in the configuration.');
+  }
 
-    try {
-        await mongoose.connect(config.MONGO_URI, clientOptions);
-        logger.info('Connected to the database successfully.',
-            // {
-            //     uri: config.MONGO_URI,
-            //     options: clientOptions,
-            // }
-        );
-    } catch (error) {
-        if (error instanceof Error) {
-            throw error;
-        }
-        logger.error('Error connecting to the database', error);
+  try {
+    await mongoose.connect(config.MONGO_URI, clientOptions);
+    logger.info(
+      'Connected to the database successfully.',
+      // {
+      //     uri: config.MONGO_URI,
+      //     options: clientOptions,
+      // }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
     }
+    logger.error('Error connecting to the database', error);
+  }
 };
 
 /**
@@ -72,20 +73,20 @@ export const connectToDatabase = async (): Promise<void> => {
  * or logged to the console.
  */
 
-
 export const disconnectFromDatabase = async (): Promise<void> => {
-    try {
-        await mongoose.disconnect();
-        logger.info('Disconnected from the database successfully.',
-            // {
-            //     uri: config.MONGO_URI,
-            //     options: clientOptions,
-            // }
-        );
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        }
-        logger.error('Error disconnecting from the database', error);
+  try {
+    await mongoose.disconnect();
+    logger.info(
+      'Disconnected from the database successfully.',
+      // {
+      //     uri: config.MONGO_URI,
+      //     options: clientOptions,
+      // }
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
     }
+    logger.error('Error disconnecting from the database', error);
+  }
 };
