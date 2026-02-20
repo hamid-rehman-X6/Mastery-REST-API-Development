@@ -1,0 +1,29 @@
+/**
+ * @copyright 2026 HamidRehman
+ * @license Apache-2.0
+ */
+
+/**
+ * Node Modules
+ */
+import { validationResult } from "express-validator";
+
+/**
+ * Types
+ */
+import { Request, Response, NextFunction } from "express";
+
+const validationError = (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        res.status(400).json({
+            code: 'ValidationError',
+            error: errors.mapped(),
+        });
+        return;
+    }
+    next();
+};
+
+export default validationError;
