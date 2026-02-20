@@ -27,7 +27,7 @@ type UserData = Pick<IUser, 'email' | 'password' | 'role'>
 
 const register = async (req: Request, res: Response): Promise<void> => {
 
-    const  { email, password, role } = req.body as UserData;
+    const { email, password, role } = req.body as UserData;
 
     // Check admin registration authorization
     if (role === 'admin' && !config.WHITELIST_ADMIN_MAILS.includes(email)) {
@@ -46,7 +46,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
         const username = generateRandomUserName();
         const newUser = await User.create({
             username,
-            email,password,
+            email, password,
             role,
         });
 
@@ -55,7 +55,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
         const refreshToken = generateRefreshToken(newUser?._id);
 
         // Store refresh token in database
-        await Token.create({ token : refreshToken, userId: newUser?._id });
+        await Token.create({ token: refreshToken, userId: newUser?._id });
         logger.info('Refresh token created for user', {
             userId: newUser?._id,
             token: refreshToken,
