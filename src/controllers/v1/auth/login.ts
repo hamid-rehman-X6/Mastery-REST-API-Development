@@ -28,7 +28,10 @@ type UserData = Pick<IUser, 'email' | 'password'>;
 const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body as UserData;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email })
+      .select('username email password role')
+      .lean()
+      .exec();
 
     if (!user) {
       res.status(404).json({
@@ -44,7 +47,7 @@ const login = async (req: Request, res: Response): Promise<void> => {
     const refreshToken = generateRefreshToken(user?._id);
 
     // Store refresh token in database
-    await Token.create({ token: refreshToken, userId: user?.id });
+    await Token.create({ token: refreshToken, userId: user?._id });
     logger.info('Refresh token created for user', {
       userId: user?._id,
       token: refreshToken,
