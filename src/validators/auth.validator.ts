@@ -6,7 +6,7 @@
 /**
  * Node Modules
  */
-import { body } from 'express-validator';
+import { body, cookie } from 'express-validator';
 import bcrypt from 'bcrypt';
 
 /**
@@ -81,4 +81,12 @@ export const loginValidator = [
         throw new Error('User email or password is invalid');
       }
     }),
+];
+
+export const refreshTokenValidator = [
+  cookie('refreshToken')
+    .notEmpty()
+    .withMessage('Refresh token is required')
+    .isJWT()
+    .withMessage('Invalid refresh token'),
 ];

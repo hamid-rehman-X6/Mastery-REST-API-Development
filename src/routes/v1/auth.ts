@@ -11,7 +11,11 @@ import { Router } from 'express';
 /**
  * Custom Modules
  */
-import { loginValidator, registerValidator } from '@/validators/auth.validator';
+import {
+  loginValidator,
+  refreshTokenValidator,
+  registerValidator,
+} from '@/validators/auth.validator';
 
 /**
  * Controllers
@@ -31,6 +35,11 @@ router.post('/register', registerValidator, validationError, register);
 
 router.post('/login', loginValidator, validationError, login);
 
-router.post('/refresh-token', refreshToken);
+router.post(
+  '/refresh-token',
+  refreshTokenValidator,
+  validationError,
+  refreshToken,
+);
 
 export default router;
