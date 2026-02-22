@@ -29,6 +29,7 @@ import logout from '@/controllers/v1/auth/logout';
  * Middlewares
  */
 import validationError from '@/middlewares/validationError';
+import authenticate from '@/middlewares/authenticate';
 
 const router = Router();
 
@@ -43,6 +44,6 @@ router.post(
   refreshToken,
 );
 
-router.post('/logout', logout);
+router.post('/logout', authenticate, logout);
 
 export default router;
