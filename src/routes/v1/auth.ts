@@ -11,7 +11,7 @@ import { Router } from 'express';
 /**
  * Custom Modules
  */
-import { registerValidator } from '@/validators/auth.validator';
+import { loginValidator, registerValidator } from '@/validators/auth.validator';
 
 /**
  * Controllers
@@ -28,6 +28,6 @@ const router = Router();
 
 router.post('/register', registerValidator, validationError, register);
 
-router.post('/login', login);
+router.post('/login', loginValidator, validationError, login);
 
 export default router;
