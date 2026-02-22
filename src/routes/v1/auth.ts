@@ -18,6 +18,7 @@ import { loginValidator, registerValidator } from '@/validators/auth.validator';
  */
 import register from '@/controllers/v1/auth/register';
 import login from '@/controllers/v1/auth/login';
+import refreshToken from '@/controllers/v1/auth/refresh-token';
 
 /**
  * Middlewares
@@ -29,5 +30,7 @@ const router = Router();
 router.post('/register', registerValidator, validationError, register);
 
 router.post('/login', loginValidator, validationError, login);
+
+router.post('/refresh-token', refreshToken);
 
 export default router;
