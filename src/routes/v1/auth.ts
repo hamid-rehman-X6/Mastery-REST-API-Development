@@ -23,6 +23,7 @@ import {
 import register from '@/controllers/v1/auth/register';
 import login from '@/controllers/v1/auth/login';
 import refreshToken from '@/controllers/v1/auth/refresh-token';
+import logout from '@/controllers/v1/auth/logout';
 
 /**
  * Middlewares
@@ -41,5 +42,7 @@ router.post(
   validationError,
   refreshToken,
 );
+
+router.post('/logout', logout);
 
 export default router;
