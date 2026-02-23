@@ -13,6 +13,7 @@ const router = Router();
  * Routes
  */
 import authRoutes from '@/routes/v1/auth';
+import userRoutes from '@/routes/v1/user';
 
 /**
  * Root Route
@@ -27,5 +28,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/user', userRoutes);
 
 export default router;
