@@ -39,7 +39,54 @@ const authenticate = (
   next: NextFunction,
 ): void => {
   const authHeader = req.headers.authorization;
-  console.log('auth header', authHeader);
+
+  if (!authHeader || !authHeader.startsWith('Bearer')) {
+    res.status(401).json({
+      code: 'AuthenticationError',
+      message: 'Access denied. No token provided.',
+    });
+    return;
+  }
+
+  // Split token from 'Bearer' prefix
+  const [_, token] = authHeader.split(' ');
+
+  try {
+    // Verify the token and extract the userId from the payload
+    const jwtPayload = verifyAccessToken(token) as { userId: Types.ObjectId };
+
+    // Attach the userId to the request object for later use
+    req.userId = jwtPayload.userId;
+
+    // Proceed to the next middleware or route handler
+    return next();
+  } catch (err) {
+    // Handle expired token error
+    if (err instanceof TokenExpiredError) {
+      res.status(401).json({
+        code: 'AuthenticationError',
+        message: 'Access token has expired. Please log in again.',
+      });
+      return;
+    }
+
+    // Handle invalid token error
+    if (err instanceof JsonWebTokenError) {
+      res.status(401).json({
+        code: 'AuthenticationError',
+        message: 'Invalid access token. Please log in again.',
+      });
+      return;
+    }
+
+    // Catch any other unexpected errors
+    res.status(500).json({
+      code: 'ServerError',
+      message: 'Internal Server Error',
+      error: err instanceof Error ? err.message : 'Unknown error',
+    });
+    logger.warn('Error during authentication', err);
+  }
 };
 
 export default authenticate;

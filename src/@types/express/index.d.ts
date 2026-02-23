@@ -1,0 +1,22 @@
+/**
+ * @copyright 2026 HamidRehman
+ * @license Apache-2.0
+ */
+
+/**
+ * Node Modules
+ */
+import * as express from 'express';
+
+/**
+ * Types
+ */
+import { Types } from 'mongoose';
+
+declare global {
+  namespace Express {
+    interface Request {
+      userId?: Types.ObjectId;
+    }
+  }
+}
