@@ -22,6 +22,7 @@ const getCurrentUser = async (req: Request, res: Response) => {
   try {
     const userId = req.userId;
 
+    // Exclude the internal Mongoose version key (__v) from the result.
     const user = await User.findById(userId).select('-__v').lean().exec();
 
     res.status(200).json({
