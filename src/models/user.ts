@@ -20,9 +20,9 @@ export interface IUser {
     website?: string;
     facebook?: string;
     instagram?: string;
-    linedIn?: string;
+    linkedin?: string;
     x?: string;
-    youtbe?: string;
+    youtube?: string;
   };
 }
 
@@ -78,7 +78,7 @@ const userSchema = new Schema<IUser>(
         type: String,
         maxlength: [255, 'Instagram profile URL cannot exceed 255 characters'],
       },
-      linkedIn: {
+      linkedin: {
         type: String,
         maxlength: [255, 'LinkedIn profile URL cannot exceed 255 characters'],
       },
@@ -86,7 +86,7 @@ const userSchema = new Schema<IUser>(
         type: String,
         maxlength: [255, 'X profile URL cannot exceed 255 characters'],
       },
-      youtbe: {
+      youtube: {
         type: String,
         maxlength: [255, 'YouTube channel URL cannot exceed 255 characters'],
       },
