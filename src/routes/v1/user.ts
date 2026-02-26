@@ -7,7 +7,11 @@
  * Node Modules
  */
 import { Router } from 'express';
-import { param, body, query } from 'express-validator';
+
+/**
+ * Custom Modules
+ */
+import { updateUserValidator } from '@/validators/users.validator';
 
 /**
  * Middlewares
@@ -15,11 +19,6 @@ import { param, body, query } from 'express-validator';
 import validationError from '@/middlewares/validationError';
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
-
-/**
- * Models
- */
-import User from '@/models/user';
 
 /**
  * Controllers
@@ -40,6 +39,8 @@ router.put(
   '/current',
   authenticate,
   authorize(['admin', 'user']),
+  updateUserValidator,
+  validationError,
   updateCurrentUser,
 );
 
