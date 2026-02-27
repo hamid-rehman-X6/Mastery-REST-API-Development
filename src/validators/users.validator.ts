@@ -6,7 +6,7 @@
 /**
  * Node Modules
  */
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 
 /**
  * Models
@@ -60,4 +60,15 @@ export const updateUserValidator = [
     .withMessage('Invalid URL')
     .isLength({ max: 100 })
     .withMessage('URL must be less than 100 characters'),
+];
+
+export const getAllUsersValidator = [
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage('Limit must be an integer between 1 and 50'),
+  query('offset')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Offset must be a positive integer'),
 ];

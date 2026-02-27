@@ -11,7 +11,10 @@ import { Router } from 'express';
 /**
  * Custom Modules
  */
-import { updateUserValidator } from '@/validators/users.validator';
+import {
+  getAllUsersValidator,
+  updateUserValidator,
+} from '@/validators/users.validator';
 
 /**
  * Middlewares
@@ -53,6 +56,13 @@ router.delete(
   deleteCurrentUser,
 );
 
-router.get('/', authenticate, authorize(['admin']), getAllUsers);
+router.get(
+  '/',
+  authenticate,
+  authorize(['admin']),
+  getAllUsersValidator,
+  validationError,
+  getAllUsers,
+);
 
 export default router;
