@@ -6,7 +6,7 @@
 /**
  * Node Modules
  */
-import { body, query } from 'express-validator';
+import { body, param, query } from 'express-validator';
 
 /**
  * Models
@@ -71,4 +71,8 @@ export const getAllUsersValidator = [
     .optional()
     .isInt({ min: 0 })
     .withMessage('Offset must be a positive integer'),
+];
+
+export const getUserValidator = [
+  param('userId').notEmpty().isMongoId().withMessage('Invalid user ID'),
 ];
