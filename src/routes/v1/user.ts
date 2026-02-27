@@ -13,8 +13,8 @@ import { Router } from 'express';
  */
 import {
   getAllUsersValidator,
-  getUserValidator,
   updateUserValidator,
+  userIdParamValidator,
 } from '@/validators/users.validator';
 
 /**
@@ -32,6 +32,7 @@ import updateCurrentUser from '@/controllers/v1/user/update_current_user';
 import deleteCurrentUser from '@/controllers/v1/user/delete_current_user';
 import getAllUsers from '@/controllers/v1/user/get_all_users';
 import getUser from '@/controllers/v1/user/get_user';
+import deleteUser from '@/controllers/v1/user/delete_user';
 
 const router = Router();
 
@@ -71,9 +72,18 @@ router.get(
   '/:userId',
   authenticate,
   authorize(['admin']),
-  getUserValidator,
+  userIdParamValidator,
   validationError,
   getUser,
+);
+
+router.delete(
+  '/:userId',
+  authenticate,
+  authorize(['admin']),
+  userIdParamValidator,
+  validationError,
+  deleteUser,
 );
 
 export default router;
