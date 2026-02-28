@@ -1,203 +1,210 @@
 # Blog API
 
-A robust and scalable RESTful API for a blogging platform built with Express.js, TypeScript, and MongoDB. This project demonstrates modern backend development practices with security, performance optimization, and comprehensive logging.
+A robust and secure RESTful API for a blogging platform built with Express.js, TypeScript, and MongoDB. The codebase demonstrates modern backend practices including user authentication, role‑based access control, token management, validation, and structured logging.
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Express.js Server** - Fast and minimalist web framework for Node.js
-- **TypeScript** - Strongly-typed JavaScript for better code quality and maintainability
-- **MongoDB Integration** - Document-based database with Mongoose ODM
-- **Rate Limiting** - Protects API from excessive requests and abuse
-- **Security** - Helmet middleware for setting secure HTTP headers
-- **CORS Support** - Configurable Cross-Origin Resource Sharing
-- **Request Compression** - Gzip compression for optimized response payloads
-- **Structured Logging** - Winston logger for comprehensive application logging
-- **Environment Configuration** - Secure configuration management using environment variables
-- **API Versioning** - Support for multiple API versions (v1, v2)
-- **Hot Reload Development** - Nodemon for automatic server restart on file changes
-- **Path Aliases** - TypeScript path mapping for cleaner imports
+- **Authentication & Authorization** – JWT‑based login/register with refresh tokens; role‑based access control (admin/user)
+- **User Management** – endpoints for creating, updating, deleting, and fetching user profiles
+- **Access/Refresh Tokens** – secure access tokens with expiration and persistent refresh tokens stored in HTTP‑only cookies and database
+- **Rate Limiting** – prevents abuse with configurable limits
+- **Security Hardening** – Helmet headers, CORS filtering, input validation
+- **Data Validation** – `express-validator` schemas for requests and parameters
+- **Logging** – Winston configured for JSON logs with levels and error stacks
+- **Environment Configuration** – centralized `.env` support with sensible defaults
+- **API Versioning** – v1 implemented; v2 scaffolding provided
+- **Hot‑Reload Development** – Nodemon with ts-node for fast iteration
+- **TypeScript with Path Aliases** – clean imports with `@/` alias
+- **Graceful Shutdown** – database disconnect on SIGTERM/SIGINT
 
 ## 🛠 Tech Stack
 
-| Component | Technology |
-|-----------|------------|
-| **Runtime** | Node.js |
-| **Language** | TypeScript |
-| **Web Framework** | Express.js 5.1.0 |
-| **Database** | MongoDB + Mongoose 8.16.0 |
-| **Security** | Helmet 8.1.0 |
-| **Logging** | Winston 3.17.0 |
-| **Rate Limiting** | Express Rate Limit 7.5.0 |
-| **Development** | Nodemon, ts-node |
+| Component        | Technology                        |
+|------------------|-----------------------------------|
+| **Runtime**      | Node.js                           |
+| **Language**     | TypeScript                        |
+| **Web Framework**| Express.js 5.1.0                  |
+| **Database**     | MongoDB + Mongoose 8.16.0         |
+| **Security**     | Helmet 8.1.0, express-validator   |
+| **Logging**      | Winston 3.17.0                    |
+| **Rate Limiting**| express-rate-limit 7.5.0          |
+| **Auth**         | jsonwebtoken, bcrypt              |
+| **Dev Tools**    | Nodemon, ts-node, Prettier       |
 
 ## 📋 Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Node.js** (v16 or higher)
-- **npm** (v7 or higher)
-- **MongoDB** (local or cloud instance - MongoDB Atlas recommended)
+- **Node.js** v16+
+- **npm** v7+
+- **MongoDB** (local or Atlas)
 
 ## 🚀 Installation
 
-1. **Clone the repository**
+1. Clone the repo:
    ```bash
    git clone <repository-url>
    cd blog-api
    ```
-
-2. **Install dependencies**
+2. Install dependencies:
    ```bash
    npm install
    ```
-
-3. **Create environment configuration**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   PORT=3000
-   NODE_ENV=development
-   MONGO_URI=mongodb://localhost:27017/blog-db
-   LOG_LEVEL=info
-   ```
-
-4. **Start the development server**
+3. Create a `.env` file (see configuration section below).
+4. Start development server:
    ```bash
    npm run dev
    ```
-
-   The server will start at `http://localhost:3000`
+   Server listens on `http://localhost:${PORT || 3000}` by default.
 
 ## ⚙️ Configuration
 
 ### Environment Variables
 
-| Variable | Description | Default | Required |
-|----------|-------------|---------|----------|
-| `PORT` | Server port | 3000 | No |
-| `NODE_ENV` | Environment (development/production/test) | development | Yes |
-| `MONGO_URI` | MongoDB connection string | - | Yes |
-| `LOG_LEVEL` | Winston logger level (error/warn/info/debug) | info | No |
+| Variable               | Description                                                        | Default         | Required |
+|------------------------|--------------------------------------------------------------------|-----------------|----------|
+| `PORT`                 | Server port                                                        | 3000            | No       |
+| `NODE_ENV`             | `development` / `production` / `test`                              | development     | Yes      |
+| `MONGO_URI`            | MongoDB connection string                                          | —               | Yes      |
+| `LOG_LEVEL`            | Winston log level (error, warn, info, debug)                       | info            | No       |
+| `WHITELIST_ORIGINS`    | Comma‑separated list of allowed CORS origins                       | http://localhost:3000 | No |
+| `JWT_ACCESS_SECRET`    | Secret used to sign access tokens                                  | —               | Yes      |
+| `JWT_REFRESH_SECRET`   | Secret used to sign refresh tokens                                 | —               | Yes      |
+| `ACCESS_TOKEN_EXPIRES` | Token lifetime (e.g. "15m", "1h")                              | —               | Yes      |
+| `REFRESH_TOKEN_EXPIRES`| Refresh token lifetime (e.g. "7d")                               | —               | Yes      |
+| `WHITELIST_ADMIN_MAILS`| Comma‑separated emails allowed to register as admin                | see config.ts   | No       |
 
-### CORS Configuration
+> **Note:** The `.env.example` file provides a template for required values.
 
-The API includes configurable CORS. Currently whitelisted origins:
-- `http://localhost:3000`
+### CORS
 
-Modify the `WHITELIST_ORIGINS` array in [src/config/index.ts](src/config/index.ts) to allow additional origins.
+Allowed origins are defined in `config.WHITELIST_ORIGINS`. Modify as needed.
+
+### Admin Registration
+
+To prevent unauthorized admin signups, only emails in `WHITELIST_ADMIN_MAILS` may register with role `admin`.
 
 ## 📁 Project Structure
 
 ```
 blog-api/
 ├── src/
-│   ├── server.ts              # Express app setup and middleware configuration
-│   ├── config/
-│   │   └── index.ts           # Centralized configuration and environment variables
-│   ├── lib/
-│   │   ├── express_rate_limit.ts  # Rate limiting configuration
-│   │   ├── mongoose.ts         # MongoDB connection setup
-│   │   └── winston.ts          # Logging configuration
-│   └── routes/
-│       ├── v1/
-│       │   ├── index.ts        # V1 API routes
-│       │   └── auth.ts         # Authentication endpoints
-│       └── v2/                 # V2 API routes (planned)
-├── dist/                      # Compiled JavaScript output
-├── .env                       # Environment variables (not in version control)
-├── .env.example              # Template for environment variables
-├── nodemon.json              # Nodemon configuration for development
-├── tsconfig.json             # TypeScript configuration
-├── package.json              # Project dependencies and scripts
-├── LICENSE                   # Apache-2.0 License
-└── README.md                 # This file
+│   ├── server.ts              # App entry point, middleware & routes setup
+│   ├── config/                # Environment and application config
+│   │   └── index.ts
+│   ├── controllers/           # Route handlers grouped by version
+│   │   └── v1/
+│   │       ├── auth/          # register, login, refresh-token, logout
+│   │       └── user/          # user CRUD and profile endpoints
+│   ├── routes/
+│   │   └── v1/                # Express routers for API v1
+│   ├── middlewares/           # auth, authorization, validation
+│   ├── models/                # Mongoose schemas (User, Token)
+│   ├── validators/            # express-validator schemas
+│   ├── lib/                   # shared utilities (jwt, mongoose, rate-limit, winston)
+│   ├── utils/                 # helper functions (random username, etc.)
+│   ├── @types/                # custom type declarations
+│   └── ...                    # other support code
+├── dist/                      # compiled output (ignored in git)
+├── .env.example
+├── nodemon.json
+├── tsconfig.json
+├── package.json
+└── README.md
 ```
-
-### Key Directories
-
-- **src/** - TypeScript source code
-- **src/config/** - Application configuration
-- **src/lib/** - Shared utility libraries and configurations
-- **src/routes/** - API endpoints organized by version
-- **dist/** - Compiled JavaScript (generated during build)
 
 ## 🔌 API Endpoints
 
-### Base URL
-```
-http://localhost:3000/api/v1
-```
+Base URL: `http://localhost:<PORT>/api/v1`
 
-### Health Check
-```http
-GET /
-```
-Returns API status and version information.
+### Auth
 
-### Authentication Routes
-```
-GET/POST /auth/*
-```
-Authentication related endpoints (to be implemented).
+| Method | Endpoint              | Description                                | Access        |
+|--------|-----------------------|--------------------------------------------|---------------|
+| POST   | `/auth/register`      | Create new user (`user` or `admin`)        | public        |
+| POST   | `/auth/login`         | Log in (returns access token & cookie)     | public        |
+| POST   | `/auth/refresh-token` | Refresh access token using HTTP‑only cookie | public      |
+| POST   | `/auth/logout`        | Log out and clear refresh token            | authenticated |
+
+### Users
+
+| Method | Endpoint                     | Description                              | Access                |
+|--------|------------------------------|------------------------------------------|-----------------------|
+| GET    | `/users/current`             | Get profile of logged‑in user            | auth (user/admin)     |
+| PUT    | `/users/current`             | Update current user                      | auth (user/admin)     |
+| DELETE | `/users/current`             | Delete own account                       | auth (user/admin)     |
+| GET    | `/users`                     | List users (paginated)                   | auth (admin)          |
+| GET    | `/users/:userId`             | Get specific user by ID                  | auth (admin)          |
+| DELETE | `/users/:userId`             | Delete user by ID                        | auth (admin)          |
+
+#### Query Parameters
+
+- `limit` (integer 1–50, default 20)
+- `offset` (integer ≥0, default 0)
+
+#### Request Validation
+
+All endpoints use express-validator; invalid inputs return `400 ValidationError` with detailed messages.
+
+#### Authentication
+
+Access tokens are sent in `Authorization: Bearer <token>` header. Refresh tokens are stored in HTTP‑only cookies.
+
+#### Roles
+
+- `user`: basic access
+- `admin`: can view/delete other users and list users
+
+### Health
+
+`GET /`  
+Returns basic status JSON `{ message, status, version, timestamp }`.
 
 ## 💻 Development
 
-### Available Scripts
+### Scripts
 
-- **`npm run dev`** - Start development server with hot reload
+- `npm run dev` – start server with hot reload
+- `npm run format` – format source with Prettier
+- `npm run format:check` – verify formatting
 
-### Build and Compilation
-
-TypeScript is automatically compiled during development via `ts-node`. To manually compile:
+TypeScript is compiled on‑the‑fly via `ts-node`. To build manually:
 
 ```bash
 npx tsc
 ```
 
-### Code Quality
+## 🔒 Security
 
-The project includes Prettier for code formatting. Configuration is in [.prettierrc](.prettierrc).
-
-## 🔒 Security Features
-
-- **Helmet** - Sets security HTTP headers
-- **CORS** - Validates and controls cross-origin requests
-- **Rate Limiting** - Prevents API abuse and DDoS attacks
-- **Input Validation** - URL-encoded and JSON body parsing with size limits
-- **Environment Isolation** - Secure configuration management
+- **Helmet** secures headers
+- **CORS** whitelisting with origin logging
+- **Rate Limiting** protects endpoints
+- **JWT & Cookies** for session management
+- **Password Hashing** with bcrypt
+- **Input Validation** prevents malformed data
+- **Environment Isolation** sensitive info kept in `.env`
 
 ## 📊 Logging
 
-The application uses Winston for structured logging:
-
-- **Console Transport** (Development only)
-- **JSON Format** with timestamps and error stacks
-- **Configurable Log Levels** (error, warn, info, debug)
-
-Log levels can be controlled via the `LOG_LEVEL` environment variable.
+- Winston configured for JSON output
+- Console transport active in development
+- Log levels controlled by `LOG_LEVEL`
+- Errors include stack traces
 
 ## 🐛 Error Handling
 
-- Database connection errors are logged and handled gracefully
-- CORS violations are logged with origin information
-- Server startup failures are logged with detailed error information
-- Production environment exits on startup failure
+- Consistent error codes (AuthenticationError, AuthorizationError, ValidationError, NotFound, ServerError)
+- Database and startup errors are logged; server exits in production on startup failure.
 
-## 📝 Contributing
+## 🤝 Contributing
 
-When contributing to this project:
-
-1. Follow the existing code style and TypeScript conventions
-2. Maintain proper copyright headers in new files
-3. Use meaningful commit messages
-4. Ensure code is properly typed with TypeScript
-5. Test thoroughly before submitting
+- Follow TypeScript conventions
+- Keep code properly typed
+- Add appropriate unit tests (if present)
+- Use clear commit messages
+- Respect existing file headers and license
 
 ## 📄 License
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
-
----
+Apache License 2.0 – see [LICENSE](LICENSE).
 
 **Author:** HamidRehman  
 **Last Updated:** February 2026  
