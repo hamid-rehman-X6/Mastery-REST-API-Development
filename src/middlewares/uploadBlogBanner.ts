@@ -4,14 +4,10 @@
  */
 
 /**
- * Node Modules
- */
-import multer from 'multer';
-
-/**
  * Custom Modules
  */
 import { logger } from '@/lib/winston';
+import uploadToCloudinary from '@/lib/cloudinary';
 
 /**
  * Models
@@ -22,6 +18,7 @@ import Blog from '@/models/blog';
  * Types
  */
 import type { Request, Response, NextFunction } from 'express';
+import type { UploadApiErrorResponse } from 'cloudinary';
 
 /**
  * Constants
@@ -52,14 +49,46 @@ const uploadBlogBanner = (method: 'post' | 'put') => {
     }
 
     try {
-      const { blogId } = req.params;
-      const blog = await Blog.findById(blogId).select('banner.publicId').exec();
-    } catch (err) {
-      res.status(500).json({
-        code: 'ServerError',
-        message: 'Internal Server Error',
-        error: err instanceof Error ? err.message : 'Unknown error',
+      //   const { blogId } = req.params;
+      //   const blog = await Blog.findById(blogId).select('banner.publicId').exec();
+
+      const data = await uploadToCloudinary(
+        req.file.buffer,
+        // blog?.banner.publicId.replace('blog_api/', ''),
+      );
+      if (!data) {
+        res.status(500).json({
+          code: 'ServerError',
+          message: 'Internal Server Error',
+        });
+        logger.error('Failed to upload banner image to Cloudinary', {
+          //   blogId,
+          //   publicId: blog?.banner.publicId,
+        });
+        return;
+      }
+
+      const newBanner = {
+        publicId: data.public_id,
+        url: data.secure_url,
+        width: data.width,
+        height: data.height,
+      };
+
+      logger.info('Banner image uploaded to Cloudinary successfully', {
+        //   blogId,
+        banner: newBanner,
       });
+
+      req.body.banner = newBanner;
+      next();
+    } catch (err: UploadApiErrorResponse | any) {
+      res.status(err.http_code).json({
+        code: err.http_code < 500 ? 'ValidationError' : err.name,
+        message: err.message,
+      });
+
+      logger.error('Error uploading banner image to Cloudinary', err);
     }
   };
 };
