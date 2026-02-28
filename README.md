@@ -220,4 +220,4 @@ Apache License 2.0 – see [LICENSE](LICENSE).
 
 ---
 
-For issues, questions, or contributions, please open an issue or contact the development team.
+For issues or questions, please open an issue in this repository.
