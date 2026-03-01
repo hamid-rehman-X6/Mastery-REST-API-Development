@@ -35,9 +35,9 @@ router.post(
   authenticate,
   authorize(['admin']),
   upload.single('banner_image'),
-  uploadBlogBanner('post'),
   createBlogValidator,
   validationError,
+  uploadBlogBanner('post'),
   createBlog,
 );
 
