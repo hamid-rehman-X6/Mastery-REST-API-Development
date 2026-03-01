@@ -6,7 +6,7 @@
 /**
  * Node Modules
  */
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 
 export const createBlogValidator = [
   body('title')
@@ -21,4 +21,15 @@ export const createBlogValidator = [
     .optional()
     .isIn(['draft', 'published'])
     .withMessage('Status must be either draft or published'),
+];
+
+export const getAllBlogsValidator = [
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage('Limit must be an integer between 1 and 50'),
+  query('offset')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('Offset must be a positive integer'),
 ];
