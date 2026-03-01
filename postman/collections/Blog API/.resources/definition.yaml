@@ -1,0 +1,33 @@
+$kind: collection
+name: Blog API
+description: |-
+  A robust and secure RESTful API for a blogging platform built with Express.js, TypeScript, and MongoDB.
+  
+  ## Features
+  - JWT-based authentication with access and refresh tokens
+  - Role-based access control (admin/user)
+  - User management endpoints
+  - Blog creation with image upload
+  
+  ## Authentication
+  Use Bearer token in Authorization header:
+  ```
+  Authorization: Bearer {{accessToken}}
+  ```
+  
+  Refresh tokens are stored in HTTP-only cookies and managed automatically.
+  
+  ## Base URL
+  `{{baseUrl}}/api/v1`
+variables:
+  - key: baseUrl
+    value: 'http://localhost:3000'
+    description: Base URL for the API server
+  - key: accessToken
+    value: ''
+    description: JWT access token obtained after login/register
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'

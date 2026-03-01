@@ -1,0 +1,11 @@
+$kind: collection
+name: Auth
+description: |-
+  Authentication endpoints for user registration, login, token refresh, and logout.
+  
+  ## Token Flow
+  1. Register or Login to receive an access token and refresh token (in HTTP-only cookie)
+  2. Use the access token in the Authorization header for protected endpoints
+  3. When access token expires, use the refresh-token endpoint to get a new one
+  4. Logout to invalidate the refresh token
+order: 1000

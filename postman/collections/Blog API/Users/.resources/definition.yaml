@@ -1,0 +1,14 @@
+$kind: collection
+name: Users
+description: |-
+  User management endpoints for profile operations and admin user management.
+  
+  ## Access Levels
+  - **Current User endpoints:** Accessible by any authenticated user (admin or user role)
+  - **Admin endpoints:** Only accessible by users with admin role
+  
+  ## Pagination
+  List endpoints support pagination with:
+  - `limit`: Number of results (1-50, default: 20)
+  - `offset`: Number of results to skip (default: 0)
+order: 2000

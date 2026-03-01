@@ -1,0 +1,27 @@
+$kind: http-request
+name: Get All Users
+description: |-
+  Retrieve a paginated list of all users.
+  
+  **Access:** Admin only
+  
+  **Query Parameters:**
+  - `limit` (optional): Number of users to return (1-50, default: 20)
+  - `offset` (optional): Number of users to skip (default: 0)
+  
+  **Response:** Returns paginated list with limit, offset, total count, and users array.
+method: GET
+url: '{{baseUrl}}/api/v1/users'
+order: 4000
+queryParams:
+  - key: limit
+    value: '20'
+    description: Number of users to return (1-50)
+  - key: offset
+    value: '0'
+    description: Number of users to skip
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'

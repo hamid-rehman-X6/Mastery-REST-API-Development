@@ -1,0 +1,12 @@
+$kind: collection
+name: Blogs
+description: |-
+  Blog management endpoints for creating and managing blog posts.
+  
+  ## Access Levels
+  - **Create Blog:** Admin only
+  
+  ## Blog Status
+  - `draft`: Blog is not published
+  - `published`: Blog is publicly visible
+order: 3000

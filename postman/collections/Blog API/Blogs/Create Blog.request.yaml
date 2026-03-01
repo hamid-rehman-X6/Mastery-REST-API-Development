@@ -1,0 +1,39 @@
+$kind: http-request
+name: Create Blog
+description: |-
+  Create a new blog post with optional banner image.
+  
+  **Access:** Admin only
+  
+  **Request Body (multipart/form-data):**
+  - `title` (required): Blog title (max 180 chars)
+  - `content` (required): Blog content (HTML allowed, will be sanitized)
+  - `status` (optional): Either "draft" or "published" (default: "draft")
+  - `banner_image` (optional): Image file for the blog banner
+  
+  **Note:** The banner image is uploaded to Cloudinary and the URL is stored with the blog.
+  
+  **Response:** Returns the created blog object with id, title, slug, content, banner, author, and timestamps.
+method: POST
+url: '{{baseUrl}}/api/v1/blogs'
+order: 1000
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'
+body:
+  type: formdata
+  content:
+    - key: title
+      type: text
+      value: My First Blog Post
+      description: Blog title (max 180 characters)
+    - key: content
+      type: text
+      value: '<h1>Welcome</h1><p>This is my first blog post content.</p>'
+      description: Blog content (HTML allowed)
+    - key: status
+      type: text
+      value: draft
+      description: 'Blog status: draft or published'

@@ -1,0 +1,13 @@
+$kind: http-request
+name: Refresh Token
+description: |-
+  Get a new access token using the refresh token stored in cookies.
+  
+  **Access:** Public (requires valid refresh token cookie)
+  
+  **Note:** The refresh token must be present in the HTTP-only cookie (automatically sent by browser/Postman).
+  
+  **Response:** Returns a new access token.
+method: POST
+url: '{{baseUrl}}/api/v1/auth/refresh-token'
+order: 3000

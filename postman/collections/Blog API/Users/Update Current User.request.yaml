@@ -1,0 +1,42 @@
+$kind: http-request
+name: Update Current User
+description: |-
+  Update the profile of the currently authenticated user.
+  
+  **Access:** Authenticated (user or admin role)
+  
+  **Request Body (all fields optional):**
+  - `username`: New username (max 20 chars, must be unique)
+  - `email`: New email (max 50 chars, must be unique)
+  - `password`: New password (min 8 chars)
+  - `first_name`: First name (2-20 chars)
+  - `last_name`: Last name (2-20 chars)
+  - `website`: Personal website URL
+  - `facebook`: Facebook profile URL
+  - `instagram`: Instagram profile URL
+  - `linkedin`: LinkedIn profile URL
+  - `x`: X (Twitter) profile URL
+  - `youtube`: YouTube channel URL
+  
+  **Response:** Returns updated user profile.
+method: PUT
+url: '{{baseUrl}}/api/v1/users/current'
+order: 2000
+headers:
+  - key: Content-Type
+    value: application/json
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'
+body:
+  type: json
+  content: |-
+    {
+      "username": "newusername",
+      "first_name": "John",
+      "last_name": "Doe",
+      "website": "https://example.com",
+      "linkedin": "https://linkedin.com/in/johndoe"
+    }

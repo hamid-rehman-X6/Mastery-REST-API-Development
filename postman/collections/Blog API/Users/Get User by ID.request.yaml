@@ -1,0 +1,23 @@
+$kind: http-request
+name: Get User by ID
+description: |-
+  Retrieve a specific user by their MongoDB ObjectId.
+  
+  **Access:** Admin only
+  
+  **Path Parameters:**
+  - `userId`: Valid MongoDB ObjectId of the user
+  
+  **Response:** Returns the user object if found, or 404 if not found.
+method: GET
+url: '{{baseUrl}}/api/v1/users/:userId'
+order: 5000
+pathVariables:
+  - key: userId
+    value: '507f1f77bcf86cd799439011'
+    description: MongoDB ObjectId of the user
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'
