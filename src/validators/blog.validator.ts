@@ -6,7 +6,7 @@
 /**
  * Node Modules
  */
-import { body, query } from 'express-validator';
+import { body, query, param } from 'express-validator';
 
 export const createBlogValidator = [
   body('title')
@@ -32,4 +32,8 @@ export const getAllBlogsValidator = [
     .optional()
     .isInt({ min: 0 })
     .withMessage('Offset must be a positive integer'),
+];
+
+export const getBlogSlugValidator = [
+  param('slug').notEmpty().withMessage('Slug is required'),
 ];
