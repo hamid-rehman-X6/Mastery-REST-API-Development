@@ -37,3 +37,17 @@ export const getAllBlogsValidator = [
 export const getBlogSlugValidator = [
   param('slug').notEmpty().withMessage('Slug is required'),
 ];
+
+export const blogIdParamsValidator = [
+  param('blogId').notEmpty().isMongoId().withMessage('Invalid Blog Id'),
+  body('title')
+    .optional()
+    .isLength({ max: 180 })
+    .withMessage('Title must be at most 180 characters long'),
+
+  body('content'),
+  body('status')
+    .optional()
+    .isIn(['draft', 'published'])
+    .withMessage('Status must be either draft or published'),
+];

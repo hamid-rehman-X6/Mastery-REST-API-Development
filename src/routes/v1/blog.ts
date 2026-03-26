@@ -13,6 +13,7 @@ import multer from 'multer';
  * Custom Modules
  */
 import {
+  blogIdParamsValidator,
   createBlogValidator,
   getAllBlogsValidator,
   getBlogSlugValidator,
@@ -25,6 +26,7 @@ import createBlog from '@/controllers/v1/blog/create_blog';
 import getAllBlogs from '@/controllers/v1/blog/get_all_blogs';
 import getBlogsByUser from '@/controllers/v1/blog/get_blogs_by_user';
 import getBlogsBySlug from '@/controllers/v1/blog/get_blog_by_slug';
+import updateBlog from '@/controllers/v1/blog/update_blog';
 
 /**
  * Middlewares
@@ -75,6 +77,17 @@ router.get(
   getBlogSlugValidator,
   validationError,
   getBlogsBySlug,
+);
+
+router.put(
+  '/:blogId',
+  authenticate,
+  authorize(['admin']),
+  upload.single('banner_image'),
+  blogIdParamsValidator,
+  validationError,
+  uploadBlogBanner('put'),
+  updateBlog,
 );
 
 export default router;

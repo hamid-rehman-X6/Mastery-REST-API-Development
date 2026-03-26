@@ -49,12 +49,12 @@ const uploadBlogBanner = (method: 'post' | 'put') => {
     }
 
     try {
-      //   const { blogId } = req.params;
-      //   const blog = await Blog.findById(blogId).select('banner.publicId').exec();
+      const { blogId } = req.params;
+      const blog = await Blog.findById(blogId).select('banner.publicId').exec();
 
       const data = await uploadToCloudinary(
         req.file.buffer,
-        // blog?.banner.publicId.replace('blog_api/', ''),
+        blog?.banner.publicId.replace('blog_api/', ''),
       );
       if (!data) {
         res.status(500).json({
@@ -62,8 +62,8 @@ const uploadBlogBanner = (method: 'post' | 'put') => {
           message: 'Internal Server Error',
         });
         logger.error('Failed to upload banner image to Cloudinary', {
-          //   blogId,
-          //   publicId: blog?.banner.publicId,
+          blogId,
+          publicId: blog?.banner.publicId,
         });
         return;
       }
@@ -76,7 +76,7 @@ const uploadBlogBanner = (method: 'post' | 'put') => {
       };
 
       logger.info('Banner image uploaded to Cloudinary successfully', {
-        //   blogId,
+        blogId,
         banner: newBanner,
       });
 
