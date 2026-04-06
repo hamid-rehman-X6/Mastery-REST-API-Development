@@ -1,9 +1,11 @@
 {
+    "$schema": "http://json-schema.org/draft-04/schema#",
     "compilerOptions": {
         "target": "es6",
         "module": "commonjs",
         "rootDir": "src",
         "baseUrl": "./",
+        "ignoreDeprecations": "6.0",
         "outDir": "dist",
         "removeComments": true,
         "esModuleInterop": true,
