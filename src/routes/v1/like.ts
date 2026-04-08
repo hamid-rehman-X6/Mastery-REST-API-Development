@@ -17,6 +17,7 @@ import { likeBlogValidator } from '@/validators/like.validator';
  * Controllers
  */
 import likeBlog from '@/controllers/v1/like/like_blog';
+import unlikeBlog from '@/controllers/v1/like/unlike_blog';
 
 /**
  * Middlewares
@@ -34,6 +35,15 @@ router.post(
   likeBlogValidator,
   validationError,
   likeBlog,
+);
+
+router.delete(
+  '/blog/:blogId',
+  authenticate,
+  authorize(['admin', 'user']),
+  likeBlogValidator,
+  validationError,
+  unlikeBlog,
 );
 
 export default router;
