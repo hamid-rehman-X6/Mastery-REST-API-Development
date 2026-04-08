@@ -13,3 +13,7 @@ export const commentBlogValidator = [
 export const getCommentBlogValidator = [
   param('blogId').isMongoId().withMessage('Invalid blog ID'),
 ]
+
+export const deleteCommentValidator = [
+  param('commentId').isMongoId().withMessage('Invalid comment ID')
+]

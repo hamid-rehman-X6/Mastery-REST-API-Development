@@ -13,6 +13,7 @@ import { Router } from 'express';
  */
 import {
   commentBlogValidator,
+  deleteCommentValidator,
   getCommentBlogValidator,
 } from '@/validators/comment.validator';
 
@@ -21,6 +22,7 @@ import {
  */
 import commentBlog from '@/controllers/v1/comment/comment_blog';
 import getCommentsByBlog from '@/controllers/v1/comment/get_comments_by_blog';
+import deleteComment from '@/controllers/v1/comment/delete_comment';
 
 /**
  * Middlewares
@@ -49,4 +51,12 @@ router.get(
   getCommentsByBlog,
 );
 
+router.delete(
+  '/:commentId',
+  authenticate,
+  authorize(['admin', 'user']),
+  deleteCommentValidator,
+  validationError,
+  deleteComment,
+);
 export default router;
