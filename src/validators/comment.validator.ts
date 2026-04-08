@@ -9,3 +9,7 @@ export const commentBlogValidator = [
   param('blogId').isMongoId().withMessage('Invalid blog ID'),
   body('content').trim().notEmpty().withMessage('Content is required'),
 ];
+
+export const getCommentBlogValidator = [
+  param('blogId').isMongoId().withMessage('Invalid blog ID'),
+]

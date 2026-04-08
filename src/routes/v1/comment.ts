@@ -11,12 +11,16 @@ import { Router } from 'express';
 /**
  * Custom Modules
  */
-import { commentBlogValidator } from '@/validators/comment.validator';
+import {
+  commentBlogValidator,
+  getCommentBlogValidator,
+} from '@/validators/comment.validator';
 
 /**
  * Controllers
  */
 import commentBlog from '@/controllers/v1/comment/comment_blog';
+import getCommentsByBlog from '@/controllers/v1/comment/get_comments_by_blog';
 
 /**
  * Middlewares
@@ -34,6 +38,15 @@ router.post(
   commentBlogValidator,
   validationError,
   commentBlog,
+);
+
+router.get(
+  '/blog/:blogId',
+  authenticate,
+  authorize(['admin', 'user']),
+  getCommentBlogValidator,
+  validationError,
+  getCommentsByBlog,
 );
 
 export default router;
