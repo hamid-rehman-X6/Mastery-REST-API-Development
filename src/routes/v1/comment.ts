@@ -16,7 +16,7 @@ import { commentBlogValidator } from '@/validators/comment.validator';
 /**
  * Controllers
  */
-
+import commentBlog from '@/controllers/v1/comment/comment_blog';
 
 /**
  * Middlewares
@@ -33,7 +33,7 @@ router.post(
   authorize(['admin', 'user']),
   commentBlogValidator,
   validationError,
+  commentBlog,
 );
-
 
 export default router;
