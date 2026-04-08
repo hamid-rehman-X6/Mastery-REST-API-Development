@@ -55,6 +55,10 @@ const likeBlog = async (req: Request, res: Response): Promise<void> => {
       blogId: blog._id,
       likesCount: blog.likesCount,
     });
+
+    res.status(200).json({
+      likesCount: blog.likesCount,
+    });
   } catch (err) {
     res.status(505).json({
       code: 'ServerError',
@@ -62,7 +66,7 @@ const likeBlog = async (req: Request, res: Response): Promise<void> => {
       error: err instanceof Error ? err.message : 'Unknown error',
     });
 
-    logger.error('Error during blog creation', err);
+    logger.error('Error while liking blog', err);
   }
 };
 

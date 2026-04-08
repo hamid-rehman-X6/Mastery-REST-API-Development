@@ -9,6 +9,11 @@
 import { Router } from 'express';
 
 /**
+ * Custom Modules
+ */
+import { likeBlogValidator } from '@/validators/like.validator';
+
+/**
  * Controllers
  */
 import likeBlog from '@/controllers/v1/like/like_blog';
@@ -18,6 +23,7 @@ import likeBlog from '@/controllers/v1/like/like_blog';
  */
 import authenticate from '@/middlewares/authenticate';
 import authorize from '@/middlewares/authorize';
+import validationError from '@/middlewares/validationError';
 
 const router = Router();
 
@@ -25,6 +31,8 @@ router.post(
   '/blog/:blogId',
   authenticate,
   authorize(['admin', 'user']),
+  likeBlogValidator,
+  validationError,
   likeBlog,
 );
 
